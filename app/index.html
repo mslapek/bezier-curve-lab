@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>client</title>
+
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <!-- build:css styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="/bower_components/jsoneditor/dist/jsoneditor.min.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
+
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild -->
+
+</head>
+
+<body>
+  <!--[if IE]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+  <!-- build:js scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="/bower_components/jquery/dist/jquery.js"></script>
+  <script src="/bower_components/paper/dist/paper-full.js"></script>
+  <script src="/bower_components/jsoneditor/dist/jsoneditor.min.js"></script>
+  <script src="/bower_components/c4.5/C45.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
+
+  <!-- build:js scripts/main.js -->
+  <script src="scripts/numeric-1.2.6.min.js"></script>
+  <script src="scripts/gestures/fitter.js"></script>
+  <script src="scripts/gestures/gesturematcher.js"></script>
+  <script src="scripts/gestures/gesture-schema.js"></script>
+  <script src="scripts/gestures/gesturedecisiontree.js"></script>
+
+  <script src="scripts/gesturecanvas/gesturecanvas.js"></script>
+  <script src="scripts/gesturecanvas/signaledfitstrategy.js"></script>
+  <script src="scripts/gesturecanvas/variablelengthfitstrategy.js"></script>
+
+  <script src="scripts/strategychooser.js"></script>
+  <script src="scripts/main.js"></script>
+  <!-- endbuild -->
+
+  <canvas id="mainCanvas" class="frame" resize="true"></canvas>
+
+  <div id="help" class="frame">
+    <h1>Gesture lab</h1>
+    <h2>Usage</h2>
+    <p>
+      Draw on gesture canvas gestures with mouse. Modify settings to get different effects.
+      There is <a href="https://github.com/mslapek/bezier-curve-lab" target="_blank">Github project</a>.
+    </p>
+
+    <p>
+      Key shortcuts.
+    </p>
+    <table>
+      <tr>
+        <th>Press</th>
+        <th>to</th>
+      </tr>
+      <tr>
+        <td><code>Alt+P</code></td>
+        <td>pause gesture trace</td>
+      </tr>
+      <tr>
+        <td><code>Alt+E</code></td>
+        <td>export graphics as SVG</td>
+      </tr>
+      <tr>
+        <td><code>Alt+C</code></td>
+        <td>clear console</td>
+      </tr>
+      <tr>
+        <td><code>Alt+Q</code></td>
+        <td>mark as fail</td>
+      </tr>
+      <tr>
+        <td><code>Alt+W</code></td>
+        <td>mark as success</td>
+      </tr>
+    </table>
+
+    <h2>Gesture span of detected gesture</h2>
+    Legend of matched curve legth (in frames).
+    <table>
+      <tr>
+        <td style="background: #FF4511">#1</td>
+        <td style="background: #1DABD6">#2</td>
+        <td style="background: #FFBF49">#3</td>
+        <td style="background: #13DB7E">#4</td>
+        <td style="background: #72705B">#5</td>
+      </tr>
+    </table>
+
+    <h2>Gesture definitions</h2>
+    The gestures are defined in <a href="https://en.wikipedia.org/wiki/JSON" target="_blank">JSON</a>. The editor is in settings.
+    Performs match to gestures defined by objects, containing following fields:
+    <ul>
+      <li><code>type</code> - as in <a href="http://paperjs.org/reference/curve/#classify" target="_blank">Paper.js library</a>.</li>
+      <li><code>inDir</code>, <code>outDir</code> - objects with fields <code>angle</code> (in degrees) and <code>margin</code>.</li>
+      <li><code>averageResidual</code> - threshold of accepted residual.</li>
+      <li><code>numberOfFrames</code> - pair of numbers, giving threshold for number of frames. First element is lower bound
+        and second is upper bound.</li>
+      <li><code>length</code> - pair of numbers, giving threshold for length of the curve in pixels. First element is lower bound
+        and second is upper bound.</li>  
+    </ul>
+
+    <p>
+      Choose some example:
+      <a href="" onclick="main.editor.setExample(0)">Example 1</a>
+      <a href="" onclick="main.editor.setExample(1)">Example 2</a>
+    </p>
+  </div>
+
+  <div id="console" class="frame">
+  </div>
+
+  <div id="settings" class="frame">
+    <h1>Settings</h1>
+    Change options and hit <b>apply</b>. Some options apply to selected fit strategies.
+    <h2>Fit strategy</h2>
+    <p>
+      Choose fit strategy:
+      <select id="strategyChooser"></select>
+    </p>
+
+    <h2>Variable length fit settings</h2>
+    <p>
+      Frame size:
+      <input id="frameSize" type="number" min="1" max="10000" value="25">
+    </p>
+
+    <p>
+      Gesture span:
+      <input id="gestureSpan" type="number" min="1" max="20" value="8">
+    </p>
+
+    <h2>Gesture definitions</h2>
+
+    <div id="gestureDefinitions"></div>
+    <p><button id="applyButton">Apply</button></p>
+  </div>
+
+
+
+</body>
+
+</html>
